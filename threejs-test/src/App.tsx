@@ -28,6 +28,7 @@ import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import { cacheRtl } from 'datami-ui-kit/dist/esm/theme/Theme';
 import { createTheme } from 'datami-ui-kit';
+import { Box, width } from '@mui/system';
 // import { cacheRtl, lightTheme } from './theme/theme';
 
 //
@@ -235,7 +236,15 @@ function App() {
   animate();
 
   return (
-    <>
+    <Box
+      sx={{
+        marginInline: '8em ',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <CacheProvider value={cacheRtl}>
         <ThemeProvider
           theme={createTheme(
@@ -251,10 +260,10 @@ function App() {
             description={fa['upload_csv_xlsx_description']}
             bullets={[fa['edges_file_upload_require'], fa['max_file_size']]}
           />
-          {/*<ExcelUpload/>*/}
+          <ExcelUpload />
         </ThemeProvider>
       </CacheProvider>
-    </>
+    </Box>
   );
 }
 
