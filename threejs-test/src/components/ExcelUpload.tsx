@@ -165,7 +165,7 @@ const ExcelUpload = () => {
         />
       </Box>
 
-      <div>
+      <div style={{ direction: 'ltr' }}>
         {data.length > 0 && (
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
