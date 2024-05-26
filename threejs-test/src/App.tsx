@@ -33,6 +33,8 @@ import {Box} from '@mui/system';
 import Highlighter from "lifeweb-text-highlighter";
 import {ColorsPrimaryMain} from "datami-ui-kit/dist/esm/style-dictionary-dist/tokens";
 import {saveAs} from 'file-saver';
+import H6 from "./components/elements/typography/H6";
+import Body2 from "./components/elements/typography/Body2";
 // import edgesSample from "../public/excel/edgesSample.xlsx"
 
 
@@ -242,11 +244,11 @@ function App() {
 
     const handleDownload = () => {
         const excelPath = "../public/excel/edgesSample.xlsx"
-            const link = document.createElement(`a`);
-            link.href = excelPath;
-            link.setAttribute(`download`, `edgesSample.xlsx`);
-            document.body.appendChild(link);
-            link.click();
+        const link = document.createElement(`a`);
+        link.href = excelPath;
+        link.setAttribute(`download`, `edgesSample.xlsx`);
+        document.body.appendChild(link);
+        link.click();
     }
 
     return (
@@ -272,15 +274,19 @@ function App() {
                     <TitleDescription
                         title={fa['upload_nodes_csv']}
                         // description={fa['upload_csv_xlsx_description']}
-                        description={<Highlighter
-                            textToHighlight={fa['upload_csv_xlsx_description']}
-                            caseSensitive={false}
-                            searchWords={[{
-                                text: "اینجا", onClick: () => {
-                                },
-                                style: {color: "blue"}
-                            }]}
-                        />}
+                        description={
+                            <Body2>
+                                <Highlighter
+                                    textToHighlight={fa['upload_csv_xlsx_description']}
+                                    caseSensitive={false}
+                                    searchWords={[{
+                                        text: "اینجا", onClick: () => {
+                                        },
+                                        style: {color: "blue"}
+                                    }]}
+                                />
+                            </Body2>
+                        }
                         bullets={[<Highlighter
                             textToHighlight={fa['edges_file_upload_require']}
                             caseSensitive={false}
