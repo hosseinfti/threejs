@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import { Box, Typography } from '@mui/material';
 import {
   TypographyTypographyH5BoldFontSize,
@@ -33,8 +33,8 @@ import {
 
 interface props {
   title?: string;
-  description?: string;
-  bullets?: string[];
+  description?: string | ReactElement;
+  bullets?: string[] | ReactElement[];
 }
 
 const TitleDescription = ({ title, description, bullets }: props) => {
@@ -42,10 +42,11 @@ const TitleDescription = ({ title, description, bullets }: props) => {
     <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
       {title && (
         <Typography
+            component={"TypographyH5Bold"}
           sx={{
             fontSize: TypographyTypographyH5BoldFontSize,
             textDecoration: TypographyTypographyH5BoldTextDecoration,
-            fontFamily: TypographyTypographyH5BoldFontFamily,
+            // fontFamily: TypographyTypographyH5BoldFontFamily,
             fontWeight: TypographyTypographyH5BoldFontWeight,
             fontStyle: TypographyTypographyH5BoldFontStyle,
             fontStretch: TypographyTypographyH5BoldFontStretch,
@@ -66,7 +67,7 @@ const TitleDescription = ({ title, description, bullets }: props) => {
           sx={{
             fontSize: TypographyTypographyBody2FontSize,
             textDecoration: TypographyTypographyBody2TextDecoration,
-            fontFamily: TypographyTypographyBody2FontFamily,
+            // fontFamily: TypographyTypographyBody2FontFamily,
             fontWeight: TypographyTypographyBody2FontWeight,
             fontStyle: TypographyTypographyBody2FontStyle,
             fontStretch: TypographyTypographyBody2FontStretch,
@@ -91,7 +92,7 @@ const TitleDescription = ({ title, description, bullets }: props) => {
                   sx={{
                     fontSize: TypographyTypographyBody2FontSize,
                     textDecoration: TypographyTypographyBody2TextDecoration,
-                    fontFamily: TypographyTypographyBody2FontFamily,
+                    // fontFamily: TypographyTypographyBody2FontFamily,
                     fontWeight: TypographyTypographyBody2FontWeight,
                     fontStyle: TypographyTypographyBody2FontStyle,
                     fontStretch: TypographyTypographyBody2FontStretch,

@@ -132,7 +132,7 @@ const ExcelUpload = () => {
           sx={{
             fontSize: TypographyTypographyBody2FontSize,
             textDecoration: TypographyTypographyBody2TextDecoration,
-            fontFamily: TypographyTypographyBody2FontFamily,
+            // fontFamily: TypographyTypographyBody2FontFamily,
             fontWeight: TypographyTypographyBody2FontWeight,
             fontStyle: TypographyTypographyBody2FontStyle,
             fontStretch: TypographyTypographyBody2FontStretch,

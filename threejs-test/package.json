@@ -22,6 +22,7 @@
     "datami-modal": "^1.0.16",
     "datami-ui-kit": "^2.1.1",
     "gsap": "^3.12.5",
+    "lifeweb-text-highlighter": "^1.7.1",
     "mui": "^0.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
