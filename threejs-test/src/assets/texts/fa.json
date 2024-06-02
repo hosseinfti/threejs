@@ -8,8 +8,11 @@
   "upload_text": "فايل مورد نظر را در اينجا درگ کنید يا می‌توانيد آن را از طریق دکمه ذيل انتخاب کنيد",
   "select_file": "انتخاب فايل",
   "add_file": "افزودن فايل",
-  "file.selected_is_a_valid_file": "فايل file$ به لحاظ ساختاری، تاييد است.",
   "selected_files_display": "پيش نمايش فايل‌های انتخاب شده",
+  "the_selected_file_is_a_valid_file": "فايل $item به لحاظ ساختاری، تاييد است.",
+  "the_selected_file_is_not_a_valid_file": "فايل $item به لحاظ ساختاری، اشتباه است.",
+  "the_selected_file_has_not_the_required_column": "فايل انتخاب شده دارای ستون $item نمی‌باشد.",
+  "the_selected_file_has_the_complex_character": "فايل انتخاب شده دارای کاراکترهای خاص می‌باشد.",
   "first_ten_lines_excel_description": "10 سطر اول جهت بررسی سريع نمايش داده شده است.",
   "delete": "حذف"
 }

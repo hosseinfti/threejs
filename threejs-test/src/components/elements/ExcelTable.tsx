@@ -90,81 +90,93 @@ const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
           label={translate('delete')}
         />
       </Box>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell
-              component="th"
-              sx={{ width: '1em' }}
-              className={'number_row_td'}
-              key={'header'}
-            ></StyledTableCell>
-            {generateExcelHeaders(number_of_iterate).map((header) => (
+      {data?.data?.length > 0 && (
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
               <StyledTableCell
                 component="th"
-                sx={{ width: '5em' }}
-                className={'alphabet_header'}
-                key={header}
-              >
-                {header}
-              </StyledTableCell>
-            ))}
-          </TableRow>
-          <TableRow>
-            <StyledTableCell
-              component="th"
-              sx={{ width: '1em' }}
-              className={'number_row_td'}
-              key={'addasd'}
-            >
-              {0}
-            </StyledTableCell>
-            {generateExcelHeaders(number_of_iterate).map((alphabet, index) => {
-              return (
+                sx={{ width: '1em' }}
+                className={'number_row_td'}
+                key={'header'}
+              />
+              {generateExcelHeaders(number_of_iterate).map((header) => (
                 <StyledTableCell
                   component="th"
-                  sx={{ width: '5em', fontWeight: 'bold' }}
-                  key={index}
+                  sx={{ width: '5em' }}
+                  className={'alphabet_header'}
+                  key={header}
                 >
-                  {Object.keys(data.data[index])[index]}
+                  {header}
                 </StyledTableCell>
-              );
-            })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.data.slice(0, 10).map((row, index) => (
-            <StyledTableRow key={row.id}>
+              ))}
+            </TableRow>
+            <TableRow>
               <StyledTableCell
-                className={'number_row_td'}
-                component="td"
+                component="th"
                 sx={{ width: '1em' }}
-                key={'asd'}
+                className={'number_row_td'}
+                key={'addasd'}
               >
-                {index + 1}
+                {0}
               </StyledTableCell>
               {generateExcelHeaders(number_of_iterate).map(
-                (alphabet, _index) => {
+                (alphabet, index) => {
                   return (
                     <StyledTableCell
-                      component="td"
-                      sx={{ width: '5em' }}
-                      key={_index}
+                      component="th"
+                      sx={{ width: '5em', fontWeight: 'bold' }}
+                      key={index}
                     >
-                      {data.data[index][Object.keys(data.data[_index])[_index]]}
+                      {Object.keys(data.data[index])[index]}
                     </StyledTableCell>
                   );
                 }
               )}
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.data.slice(0, 10).map((row, index) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell
+                  className={'number_row_td'}
+                  component="td"
+                  sx={{ width: '1em' }}
+                  key={`${row.id + index}`}
+                >
+                  {index + 1}
+                </StyledTableCell>
+                {generateExcelHeaders(number_of_iterate).map(
+                  (alphabet, _index) => {
+                    return (
+                      <StyledTableCell
+                        component="td"
+                        sx={{ width: '5em' }}
+                        key={`${alphabet + _index}`}
+                      >
+                        {
+                          data.data[index][
+                            Object.keys(data.data[_index])[_index]
+                          ]
+                        }
+                      </StyledTableCell>
+                    );
+                  }
+                )}
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
       <Box sx={{ paddingInline: Spacing05 }}>
         {data.messages[0]?.type === 'success' &&
           data.messages.map((message) => {
             return (
-              <Box dir={'rtl'} sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box
+                key={message.id}
+                dir={'rtl'}
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
                 <Icon
                   name={'check'}
                   style={{
@@ -173,7 +185,9 @@ const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
                   }}
                 />
                 <Body1 sx={{ color: ColorsSuccessLight }}>
-                  {translate(message.text)}
+                  {message?.field
+                    ? translate(message.text, { item: message.field })
+                    : translate(message.text)}
                 </Body1>
               </Box>
             );
@@ -182,7 +196,11 @@ const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
         {data.messages[0]?.type === 'error' &&
           data.messages.map((message) => {
             return (
-              <Box dir={'rtl'} sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box
+                key={message.id}
+                dir={'rtl'}
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
                 <Icon
                   name={'error'}
                   style={{
@@ -191,7 +209,9 @@ const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
                   }}
                 />
                 <Body1 sx={{ color: ColorsWarningLight }}>
-                  {translate(message.text, { item: message.field })}
+                  {message?.field
+                    ? translate(message.text, { item: message.field })
+                    : translate(message.text)}
                 </Body1>
               </Box>
             );

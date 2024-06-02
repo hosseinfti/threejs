@@ -113,12 +113,12 @@ const ExcelUpload = () => {
           >
             {data.map((json, index) => {
               return (
-                <>
+                <Box key={index}>
                   <ExcelTable data={json} />
                   {index < data.length - 1 && (
                     <Divider color={ColorsGreyWhite} />
                   )}
-                </>
+                </Box>
               );
             })}
           </Box>

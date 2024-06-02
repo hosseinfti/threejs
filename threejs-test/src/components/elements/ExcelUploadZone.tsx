@@ -18,6 +18,7 @@ import translate from '../../utils/translate';
 
 export type excelJsonDataType = { [key: string]: string };
 type excelJsonMessageType = {
+  id: string;
   type: 'error' | 'success';
   text: string;
   field?: string;
@@ -42,53 +43,82 @@ const ExcelUploadZone = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (event: any) => {
-    const file = event?.target?.files[0];
+    console.log(event);
+
+    const file = event?.target?.files && event.target.files[0];
     const reader = new FileReader();
 
     reader.onload = (e) => {
       const binaryStr = e.target.result;
-      const workbook = XLSX.read(binaryStr, { type: 'binary' });
-
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-        header: 1,
-      });
-
-      const sheet = workbook.Sheets[sheetName];
-      const fileSize = (file.size / 1024).toFixed(2);
       const messages: excelJsonMessageType[] = [];
-      const validateColumns = (worksheet) => {
-        const columns = worksheet[0]; // Get the header row
-        console.log(columns, requiredColumns);
-        requiredColumns.forEach((requiredColumn, index) => {
-          columns.findIndex((column) => column === requiredColumn) === -1
-            ? messages.push({
-                type: 'error',
-                text: `the_selected_file_has_not_the_${requiredColumn}_column`,
-                field: requiredColumn,
-              })
-            : messages.push({
-                type: 'success',
-                text: `file.selected_is_a_valid_file`,
-              });
+      try {
+        const workbook = XLSX.read(binaryStr, { type: 'binary' });
+        const sheetName = workbook.SheetNames[0];
+
+        const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+          header: 1,
         });
-        console.log(messages);
 
-        // if (!columns.includes('name') || !columns.includes('id')) {
-        //   setError('The Excel file must contain "name" and "id" columns.');
-        // } else {
-        //   setError(null); // Reset the error if columns are present
-        // }
-      };
-      validateColumns(worksheet);
+        const sheet = workbook.Sheets[sheetName];
+        const fileSize = (file.size / 1024).toFixed(2);
 
-      const jsonData: excelJsonDataType[] = XLSX.utils.sheet_to_json(sheet);
-      onUploadExcel({
-        name: file.name,
-        size: fileSize,
-        messages: messages,
-        data: jsonData,
-      });
+        const validateColumns = (worksheet) => {
+          //Check the required columns exist
+          {
+            const columns = worksheet[0]; // Get the header row
+            const hasRequiredColumns = [];
+            requiredColumns.forEach((requiredColumn, index) => {
+              const hasRequiredColumn = columns.findIndex(
+                (column) => column === requiredColumn
+              );
+              if (hasRequiredColumn < 0) {
+                messages.push({
+                  id: `${file.name}_${new Date().valueOf()}`,
+                  type: 'error',
+                  text: `the_selected_file_has_not_the_required_column`,
+                  field: requiredColumn,
+                });
+              } else {
+                hasRequiredColumns.push(true);
+              }
+            });
+
+            const hasAllRequiredColumns =
+              hasRequiredColumns?.length === requiredColumns?.length;
+
+            if (hasAllRequiredColumns) {
+              messages.push({
+                id: `${file.name}_${new Date().valueOf()}`,
+                type: 'success',
+                text: `the_selected_file_is_a_valid_file`,
+                field: file.name,
+              });
+            }
+          }
+        };
+        validateColumns(worksheet);
+
+        const jsonData: excelJsonDataType[] = XLSX.utils.sheet_to_json(sheet);
+        onUploadExcel({
+          name: file.name,
+          size: fileSize,
+          messages: messages,
+          data: jsonData,
+        });
+      } catch (_e) {
+        messages.push({
+          id: `${file.name}_${new Date().valueOf()}`,
+          type: 'error',
+          text: `the_selected_file_is_not_a_valid_file`,
+          field: file.name,
+        });
+        onUploadExcel({
+          name: file.name,
+          size: '0',
+          messages: messages,
+          data: [],
+        });
+      }
     };
 
     reader.readAsBinaryString(file);
