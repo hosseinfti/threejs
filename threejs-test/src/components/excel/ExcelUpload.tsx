@@ -1,64 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as XLSX from 'xlsx';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { borderColor, padding, width } from '@mui/system';
-import { Box, Divider, Typography } from '@mui/material';
-import fa from '../assets/texts/fa.json';
-import Icon from 'datami-font-icon';
+import React, { useState } from 'react';
+import { Box, Divider } from '@mui/material';
+
 import {
-  TypographyTypographyH4FontSize,
-  TypographyTypographyBody2FontSize,
-  TypographyTypographyBody2TextDecoration,
-  TypographyTypographyBody2FontFamily,
-  TypographyTypographyBody2FontWeight,
-  TypographyTypographyBody2FontStyle,
-  TypographyTypographyBody2FontStretch,
-  TypographyTypographyBody2LetterSpacing,
-  TypographyTypographyBody2LineHeight,
-  TypographyTypographyBody2ParagraphIndent,
-  TypographyTypographyBody2ParagraphSpacing,
-  TypographyTypographyBody2TextCase,
-  Spacing02,
-  SecondaryDivider,
   Radius04,
   Spacing05,
   ColorsGrey200,
-  ColorsGrey700,
-  ColorsGrey100,
-  ColorsGrey50,
   ColorsGreyWhite,
 } from 'datami-ui-kit/dist/esm/style-dictionary-dist/tokens';
-import { ButtonV2 } from 'datami-ui-kit';
-import Body2 from './elements/typography/Body2';
-import ExcelTable from './elements/ExcelTable';
-import ExcelUploadZone, { eachExcelJsonType } from './elements/ExcelUploadZone';
-
-// Function to generate Excel headers
+import ExcelTable from './ExcelTable';
+import ExcelUploadZone, { eachExcelJsonType } from './ExcelUploadZone';
 
 const ExcelUpload = () => {
   const [data, setData] = useState<Array<eachExcelJsonType>>([]);
-
-  // const iterate = ()=>{
-  //     let row = []
-  //     for(let i=0; i<number_of_iterate; i++){
-  //
-  //     }
-  // }
-  // useEffect(() => {
-  //     // console.log(data)
-  // }, [data]);
 
   const handleExcelUploaded = (jsonData: eachExcelJsonType) => {
     let _tempData: eachExcelJsonType[] = [...data];
     _tempData.push(jsonData);
     setData(_tempData);
+  };
+
+  const handleDeleteUploadedExcel = (id: string) => {
+    let tempData: eachExcelJsonType[] = [...data];
+    const removedIndex = tempData.findIndex((_data) => _data.id === id);
+    tempData.splice(removedIndex, 1);
+    setData([...tempData]);
   };
 
   return (
@@ -113,8 +78,12 @@ const ExcelUpload = () => {
           >
             {data.map((json, index) => {
               return (
-                <Box key={index}>
-                  <ExcelTable data={json} />
+                <Box key={`${index + '_' + new Date().valueOf()}`}>
+                  <ExcelTable
+                    id={json.id}
+                    data={json}
+                    onDelete={handleDeleteUploadedExcel}
+                  />
                   {index < data.length - 1 && (
                     <Divider color={ColorsGreyWhite} />
                   )}

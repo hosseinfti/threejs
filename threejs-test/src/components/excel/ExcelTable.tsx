@@ -17,11 +17,21 @@ import {
   Spacing03,
   Spacing05,
 } from 'datami-ui-kit/dist/esm/style-dictionary-dist/tokens';
-import Body1 from './typography/Body1';
-import Body2Bold from './typography/Body2Bold';
+import Body1 from '../elements/typography/Body1';
+import Body2Bold from '../elements/typography/Body2Bold';
 import translate from '../../utils/translate';
+import ValidationMessage from '../ValidationMessage';
 
-const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
+const ExcelTable = ({
+  data,
+  onDelete,
+  id,
+}: {
+  data: eachExcelJsonType;
+  onDelete: (id: string) => void;
+  id: string;
+}) => {
+  // Function to generate Excel headers
   const generateExcelHeaders = (num) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const result = [];
@@ -84,7 +94,9 @@ const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
           <Body1 dir={'ltr'}>({data.size} kb)</Body1>
         </Box>
         <ButtonV2
-          onClick={() => {}}
+          onClick={() => {
+            onDelete(id);
+          }}
           variant="text"
           color="error"
           label={translate('delete')}
@@ -168,55 +180,17 @@ const ExcelTable = ({ data }: { data: eachExcelJsonType }) => {
           </TableBody>
         </Table>
       )}
-      <Box sx={{ paddingInline: Spacing05 }}>
-        {data.messages[0]?.type === 'success' &&
-          data.messages.map((message) => {
-            return (
-              <Box
-                key={message.id}
-                dir={'rtl'}
-                sx={{ display: 'flex', alignItems: 'center' }}
-              >
-                <Icon
-                  name={'check'}
-                  style={{
-                    marginInlineEnd: Spacing02,
-                    color: ColorsSuccessLight,
-                  }}
-                />
-                <Body1 sx={{ color: ColorsSuccessLight }}>
-                  {message?.field
-                    ? translate(message.text, { item: message.field })
-                    : translate(message.text)}
-                </Body1>
-              </Box>
-            );
-          })}
-
-        {data.messages[0]?.type === 'error' &&
-          data.messages.map((message) => {
-            return (
-              <Box
-                key={message.id}
-                dir={'rtl'}
-                sx={{ display: 'flex', alignItems: 'center' }}
-              >
-                <Icon
-                  name={'error'}
-                  style={{
-                    marginInlineEnd: Spacing02,
-                    color: ColorsWarningLight,
-                  }}
-                />
-                <Body1 sx={{ color: ColorsWarningLight }}>
-                  {message?.field
-                    ? translate(message.text, { item: message.field })
-                    : translate(message.text)}
-                </Body1>
-              </Box>
-            );
-          })}
-      </Box>
+      <ValidationMessage
+        messages={data.messages.map((message) => {
+          return {
+            id: message.id,
+            text: message?.field
+              ? translate(message.text, { item: message.field })
+              : translate(message.text),
+            type: message.type,
+          };
+        })}
+      />
     </Box>
   );
 };

@@ -8,12 +8,12 @@ import {
   TypographyTypographyH4FontSize,
 } from 'datami-ui-kit/dist/esm/style-dictionary-dist/tokens';
 import Icon from 'datami-font-icon';
-import Body2 from './typography/Body2';
+import Body2 from '../elements/typography/Body2';
 import { ButtonV2 } from 'datami-ui-kit';
 import { Box, SxProps } from '@mui/material';
 import * as XLSX from 'xlsx';
-import Body3Bold from './typography/Body3Bold';
-import Body1 from './typography/Body1';
+import Body3Bold from '../elements/typography/Body3Bold';
+import Body1 from '../elements/typography/Body1';
 import translate from '../../utils/translate';
 
 export type excelJsonDataType = { [key: string]: string };
@@ -24,6 +24,7 @@ type excelJsonMessageType = {
   field?: string;
 };
 export type eachExcelJsonType = {
+  id: string;
   name: string;
   size: string;
   messages: excelJsonMessageType[];
@@ -43,11 +44,8 @@ const ExcelUploadZone = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (event: any) => {
-    console.log(event);
-
     const file = event?.target?.files && event.target.files[0];
     const reader = new FileReader();
-
     reader.onload = (e) => {
       const binaryStr = e.target.result;
       const messages: excelJsonMessageType[] = [];
@@ -73,7 +71,9 @@ const ExcelUploadZone = ({
               );
               if (hasRequiredColumn < 0) {
                 messages.push({
-                  id: `${file.name}_${new Date().valueOf()}`,
+                  id: `${index}_error_message_${
+                    file.name
+                  }_${new Date().valueOf()}`,
                   type: 'error',
                   text: `the_selected_file_has_not_the_required_column`,
                   field: requiredColumn,
@@ -88,7 +88,7 @@ const ExcelUploadZone = ({
 
             if (hasAllRequiredColumns) {
               messages.push({
-                id: `${file.name}_${new Date().valueOf()}`,
+                id: `0_${file.name}_${new Date().valueOf()}`,
                 type: 'success',
                 text: `the_selected_file_is_a_valid_file`,
                 field: file.name,
@@ -100,6 +100,7 @@ const ExcelUploadZone = ({
 
         const jsonData: excelJsonDataType[] = XLSX.utils.sheet_to_json(sheet);
         onUploadExcel({
+          id: `${file.name + '_' + new Date().valueOf()}`,
           name: file.name,
           size: fileSize,
           messages: messages,
@@ -107,12 +108,13 @@ const ExcelUploadZone = ({
         });
       } catch (_e) {
         messages.push({
-          id: `${file.name}_${new Date().valueOf()}`,
+          id: `0_error_message_${file.name}_${new Date().valueOf()}`,
           type: 'error',
           text: `the_selected_file_is_not_a_valid_file`,
           field: file.name,
         });
         onUploadExcel({
+          id: `${file.name + '_' + new Date().valueOf()}`,
           name: file.name,
           size: '0',
           messages: messages,
@@ -120,8 +122,8 @@ const ExcelUploadZone = ({
         });
       }
     };
-
     reader.readAsBinaryString(file);
+    inputRef.current.value = null;
   };
 
   return (

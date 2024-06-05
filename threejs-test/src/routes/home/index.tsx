@@ -24,7 +24,7 @@ import Highlighter from 'lifeweb-text-highlighter';
 import { ColorsPrimaryMain } from 'datami-ui-kit/dist/esm/style-dictionary-dist/tokens';
 import useWindowSize from '../../utils/useWindowSize';
 import TitleDescription from '../../components/TitleDescription';
-import ExcelUpload from '../../components/ExcelUpload';
+import ExcelUpload from '../../components/excel/ExcelUpload';
 import Body2 from '../../components/elements/typography/Body2';
 import translate from '../../utils/translate';
 
